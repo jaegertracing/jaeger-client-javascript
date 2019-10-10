@@ -1,7 +1,7 @@
 {
   "name": "jaeger-client-javascript",
   "version": "0.1.0",
-  "description": "Jaeger binding for OpenTracing Web compatible",
+  "description": "Javascript (Web Compatible) Jaeger Binding for OpenTracing",
   "main": "src/index.js",
   "scripts": {
     "build:js": "babel src --out-dir lib --extensions \".ts,.tsx\" --source-maps inline",
@@ -54,7 +54,7 @@
     "webpack-cli": "^3.3.8"
   },
   "dependencies": {
-    "@babel/polyfill": "^7.6.0",
+    "core-js": "^3.2.1",
     "opentracing": "^0.14.4"
   },
   "resolutions": {
