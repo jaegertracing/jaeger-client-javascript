@@ -1,0 +1,7 @@
+# Coverage report
+coverage/
+# node dependencies
+node_modules/
+# bundle
+dist/
+lib/
