@@ -1,0 +1,63 @@
+{
+  "name": "@jaeger/jsclient",
+  "version": "0.1.0",
+  "description": "Javascript (Web Compatible) Jaeger Binding for OpenTracing",
+  "main": "src/index.js",
+  "scripts": {
+    "build:js": "babel src --out-dir lib --extensions \".ts,.tsx\" --source-maps inline",
+    "build:types": "npx tsc --emitDeclarationOnly",
+    "build": "npm run build:types && npm run build:js",
+    "bundle": "webpack",
+    "check-types": "npx tsc",
+    "test": "npx jest",
+    "type-check": "tsc --noEmit",
+    "type-check:watch": "npm run type-check -- --watch"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/jaegertracing/jaeger-client-javascript.git"
+  },
+  "author": "Steven Augusto Villegas Castellanos <sagrath23@gmail.com>",
+  "license": "Apache-2.0",
+  "bugs": {
+    "url": "https://github.com/jaegertracing/jaeger-client-javascript/issues"
+  },
+  "homepage": "https://github.com/jaegertracing/jaeger-client-javascript#readme",
+  "jest": {
+    "transform": {
+      "^.+\\.tsx?$": "ts-jest"
+    },
+    "testRegex": "(/tests/.*|(\\.|/)(test|spec))\\.tsx?$",
+    "testPathIgnorePatterns": [
+      "/lib/",
+      "/node_modules/"
+    ]
+  },
+  "devDependencies": {
+    "@babel/cli": "^7.6.0",
+    "@babel/core": "^7.6.0",
+    "@babel/plugin-proposal-class-properties": "^7.5.5",
+    "@babel/plugin-proposal-numeric-separator": "^7.2.0",
+    "@babel/plugin-proposal-object-rest-spread": "^7.5.5",
+    "@babel/preset-env": "^7.6.0",
+    "@babel/preset-typescript": "^7.6.0",
+    "@babel/register": "^7.6.0",
+    "@types/jest": "^24.0.18",
+    "@types/node": "^12.7.12",
+    "babel-loader": "^8.0.4",
+    "eslint": "^6.3.0",
+    "jest": "^24.9.0",
+    "regenerator-runtime": "^0.13.3",
+    "ts-jest": "^24.1.0",
+    "typescript": "^3.6.4",
+    "webpack": "^4.40.0",
+    "webpack-cli": "^3.3.8"
+  },
+  "dependencies": {
+    "core-js": "^3.2.1",
+    "opentracing": "^0.14.4"
+  },
+  "resolutions": {
+    "babel-core": "7.0.0-bridge.0"
+  }
+}
