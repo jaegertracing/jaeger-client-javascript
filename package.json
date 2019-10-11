@@ -1,5 +1,5 @@
 {
-  "name": "jaeger-client-javascript",
+  "name": "@jaeger/jsclient",
   "version": "0.1.0",
   "description": "Javascript (Web Compatible) Jaeger Binding for OpenTracing",
   "main": "src/index.js",
