@@ -55,7 +55,8 @@
   },
   "dependencies": {
     "core-js": "^3.2.1",
-    "opentracing": "^0.14.4"
+    "opentracing": "^0.14.4",
+    "xorshift": "^1.1.1"
   },
   "resolutions": {
     "babel-core": "7.0.0-bridge.0"
