@@ -1,14 +1,32 @@
+// Copyright (c) 2019, The Jaeger Authors
+//
+// Licensed under the Apache License, Version 2.0 (the "License"); you may not use this file except
+// in compliance with the License. You may obtain a copy of the License at
+//
+// http://www.apache.org/licenses/LICENSE-2.0
+//
+// Unless required by applicable law or agreed to in writing, software distributed under the License
+// is distributed on an "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express
+// or implied. See the License for the specific language governing permissions and limitations under
+// the License.
+
 import xorshift from 'xorshift';
+import Int64 from 'node-int64';
+
+export interface Tag {
+  key: string;
+  value: any;
+}
 
 export default class Utils {
   /**
- * Determines whether a string contains a given prefix.
- *
- * @param {string} text - the string for to search for a prefix
- * @param {string} prefix - the prefix to search for in the text given.
- * @return {boolean} - boolean representing whether or not the
- * string contains the prefix.
- **/
+   * Determines whether a string contains a given prefix.
+   *
+   * @param {string} text - the string for to search for a prefix
+   * @param {string} prefix - the prefix to search for in the text given.
+   * @return {boolean} - boolean representing whether or not the
+   * string contains the prefix.
+   **/
   static startsWith(text: string, prefix: string): boolean {
     return text.indexOf(prefix) === 0;
   }
@@ -21,67 +39,51 @@ export default class Utils {
    * @return {boolean} - boolean representing whether or not the
    * string contains the suffix.
    **/
-  static endsWith(text: string, suffix: string) {
+  static endsWith(text: string, suffix: string): boolean {
     return text.lastIndexOf(suffix) === text.length - suffix.length;
   }
 
   /**
-   * Generate a Buffer that represents a random 64 bit number.
+   * Get a random buffer representing a random 64 bit.
    *
    * @return {Buffer}  - returns a buffer representing a random 64 bit
    * number.
    **/
   static getRandom64(): Buffer {
-    const randint = xorshift.randomint();
-    const buff = new Buffer(8);
-
-    buff.writeUInt32BE(randint[0], 0);
-    buff.writeUInt32BE(randint[1], 4);
-
-    return buff;
+    let randint = xorshift.randomint();
+    let buf = this.newBuffer(8);
+    buf.writeUInt32BE(randint[0], 0);
+    buf.writeUInt32BE(randint[1], 4);
+    return buf;
   }
 
   /**
-   * Encode a number in base64
-   * 
+   * Get a random buffer representing a random 128 bit.
+   *
+   * @return {Buffer}  - returns a buffer representing a random 128 bit
+   * number.
+   **/
+  static getRandom128(): Buffer {
+    let randint1 = xorshift.randomint();
+    let randint2 = xorshift.randomint();
+    let buf = this.newBuffer(16);
+    buf.writeUInt32BE(randint1[0], 0);
+    buf.writeUInt32BE(randint1[1], 4);
+    buf.writeUInt32BE(randint2[0], 8);
+    buf.writeUInt32BE(randint2[1], 12);
+    return buf;
+  }
+
+  /**
    * @param {string|number} numberValue - a string or number to be encoded
    * as a 64 bit byte array.
    * @return {Buffer} - returns a buffer representing the encoded string, or number.
    **/
-  static encodeInt64(numberValue: string | number): Buffer {
-    // TODO: check how to use Int64 in TS
+  static encodeInt64(numberValue: any): any {
     return new Int64(numberValue).toBuffer();
   }
 
   /**
-  * Convert an IP address into a int 
-  * @param {string} ip - a string representation of an ip address.
-  * @return {number | null} - a 32-bit number where each byte represents an
-  * octect of an ip address.
-  **/
-  static ipToInt(ip: string): number | null {
-    let ipl = 0;
-    let parts = ip.split('.');
-    if (parts.length !== 4) {
-      return null;
-    }
-
-    for (let i = 0; i < parts.length; i++) {
-      ipl <<= 8;
-      ipl += parseInt(parts[i], 10);
-    }
-
-    let signedLimit = 0x7fffffff;
-    if (ipl > signedLimit) {
-      return (1 << 32) - ipl;
-    }
-
-    return ipl;
-  }
-
-  /**
-   * Removes leading zeros from a string
-   * 
    * @param {string} input - the input for which leading zeros should be removed.
    * @return {string} - returns the input string without leading zeros.
    **/
@@ -99,38 +101,79 @@ export default class Utils {
     return input.substring(counter);
   }
 
-  static myIp() {
-    // TODO: Add implementation
+  static myIp(): string {
+    // TODO: find a way to get IP address
+    return '';
   }
 
-  static clone(obj: object): object {
-    let newObj = {};
-
+  static clone(obj: any): any {
+    let newObj: { [key: string]: { value: any}} = {};
     for (let key in obj) {
-      if (obj.hasOwnProperty(key)) {
+      if (Object.prototype.hasOwnProperty.call(obj, key)) {
         newObj[key] = obj[key];
       }
     }
 
-    return newObj
+    return newObj;
   }
 
-  static convertObjectToTags(dict: object): Array<object> {
-    let tags = [];
-
+  static convertObjectToTags(dict: any): Array<Tag> {
+    let tags: Array<Tag> = [];
     for (let key in dict) {
-      if(dict[key]){
-        let value = dict[key];
-
-        if (dict.hasOwnProperty(key)) {
-          tags.push({
-            key,
-            value
-          });
-        }
+      let value = dict[key];
+      if (Object.prototype.hasOwnProperty.call(dict, key)) {
+        tags.push({ key: key, value: value });
       }
     }
 
     return tags;
+  }
+
+  static httpGet(host: string, port: number, path: string, success: Function, error: Function) {
+    // TODO: Replace by axios or superagent
+
+  }
+
+  /**
+   * @param {string|number} input - a hex encoded string to store in the buffer.
+   * @return {Buffer} - returns a buffer representing the hex encoded string.
+   **/
+  static newBufferFromHex(input: string): Buffer {
+    const encoding = 'hex';
+    // check that 'Buffer.from' exists based on node's documentation
+    // https://nodejs.org/en/docs/guides/buffer-constructor-deprecation/#variant-3
+    if (Buffer.from && Buffer.from !== Uint8Array.from) {
+      return Buffer.from(input, encoding);
+    }
+    return new Buffer(input, encoding);
+  }
+
+  /**
+   * @param {number} input - a number of octets to allocate.
+   * @return {Buffer} - returns an empty buffer.
+   **/
+  static newBuffer(size: number): Buffer {
+    if (Buffer.alloc) {
+      return Buffer.alloc(size);
+    }
+    const buffer = new Buffer(size);
+    buffer.fill(0);
+    return buffer;
+  }
+
+  /**
+   * Creates a callback function that only delegates to passed <code>callback</code>
+   * after <code>limit</code> invocations. Useful in types like CompositeReporter that
+   * needs to invoke the top level callback only after all delegates' close() methods
+   * are called.
+   */
+  static countdownCallback(limit: number, callback?: () => void): () => void {
+    let count = 0;
+    return () => {
+      count++;
+      if (count >= limit && callback) {
+        callback();
+      }
+    };
   }
 }

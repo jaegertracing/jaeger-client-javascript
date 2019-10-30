@@ -44,6 +44,7 @@
     "@babel/register": "^7.6.0",
     "@types/jest": "^24.0.18",
     "@types/node": "^12.7.12",
+    "@types/node-int64": "^0.4.29",
     "babel-loader": "^8.0.4",
     "eslint": "^6.3.0",
     "jest": "^24.9.0",
@@ -55,6 +56,7 @@
   },
   "dependencies": {
     "core-js": "^3.2.1",
+    "node-int64": "^0.4.0",
     "opentracing": "^0.14.4",
     "xorshift": "^1.1.1"
   },
