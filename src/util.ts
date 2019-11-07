@@ -10,8 +10,8 @@
 // or implied. See the License for the specific language governing permissions and limitations under
 // the License.
 
+import Int64 from 'node-int64'; // TODO: check how to replace this with BigInt
 import xorshift from 'xorshift';
-import Int64 from 'node-int64';
 
 export interface Tag {
   key: string;

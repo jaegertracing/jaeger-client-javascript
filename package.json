@@ -8,7 +8,6 @@
     "build:types": "npx tsc --emitDeclarationOnly",
     "build": "npm run build:types && npm run build:js",
     "bundle": "webpack",
-    "check-types": "npx tsc",
     "test": "npx jest",
     "type-check": "tsc --noEmit",
     "type-check:watch": "npm run type-check -- --watch"
